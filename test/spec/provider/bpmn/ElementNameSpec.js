@@ -12,7 +12,8 @@ var propertiesPanelModule = require('lib'),
     selectionModule = require('diagram-js/lib/features/selection').default,
     modelingModule = require('bpmn-js/lib/features/modeling').default,
     propertiesProviderModule = require('lib/provider/bpmn'),
-    getBusinessObject = require('bpmn-js/lib/util/ModelUtil').getBusinessObject;
+    getBusinessObject = require('bpmn-js/lib/util/ModelUtil').getBusinessObject,
+    is = require('bpmn-js/lib/util/ModelUtil').is;
 
 function getEntry(container, entryId) {
   return domQuery('div[data-entry="' + entryId + '"]', container);
@@ -368,6 +369,93 @@ describe('element-name-properties', function() {
 
       });
 
+    });
+
+    describe('of a group', function() {
+
+      var categoryValue;
+
+      beforeEach(inject(function(elementRegistry, selection) {
+        // given
+        var shape = elementRegistry.get('GROUP');
+        selection.select(shape);
+
+        element = getBusinessObject(shape);
+        categoryValue = element.categoryValueRef || {};
+
+        nameField = domQuery('div[name=categoryValue]', getEntry(container, 'name'));
+        label = domQuery('label[for=camunda-name]', getEntry(container, 'name'));
+
+        expect(is(element, 'bpmn:Group')).to.be.true;
+        expect(nameField.textContent).to.equal('GROUP');
+
+        // when
+        TestHelper.triggerValue(nameField, 'foo', 'change');
+      }));
+
+
+      it('should have correct label', function() {
+        // then
+        expect(label.textContent).to.equal('Category Value');
+      });
+
+
+      describe('in the DOM', function() {
+
+        it('should execute', function() {
+          // then
+          expect(nameField.textContent).to.equal('foo');
+        });
+
+
+        it('should undo', inject(function(commandStack) {
+          // when
+          commandStack.undo();
+
+          // then
+          expect(nameField.textContent).to.equal('GROUP');
+        }));
+
+
+        it('should redo', inject(function(commandStack) {
+          // when
+          commandStack.undo();
+          commandStack.redo();
+
+          // then
+          expect(nameField.textContent).to.equal('foo');
+        }));
+
+      });
+
+
+      describe('on the business object', function() {
+
+        it('should execute', function() {
+          // then
+          expect(categoryValue.value).to.equal('foo');
+        });
+
+
+        it('should undo', inject(function(commandStack) {
+          // when
+          commandStack.undo();
+
+          // then
+          expect(categoryValue.value).to.equal('GROUP');
+        }));
+
+
+        it('should redo', inject(function(commandStack) {
+          // when
+          commandStack.undo();
+          commandStack.redo();
+
+          // then
+          expect(categoryValue.value).to.equal('foo');
+        }));
+
+      });
     });
 
   });

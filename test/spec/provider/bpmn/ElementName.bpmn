@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:category id="CATEGORY">
+    <bpmn:categoryValue id="CATEGORY_VALUE" value="GROUP" />
+  </bpmn:category>
   <bpmn:process id="Process_1" isExecutable="false">
     <bpmn:startEvent id="START_WITHOUT_NAME">
       <bpmn:outgoing>FLOW_WITHOUT_NAME_1</bpmn:outgoing>
@@ -18,6 +21,7 @@
     <bpmn:textAnnotation id="TEXTANNOTATION_WITH_NAME">    <bpmn:text>text for name</bpmn:text>
 </bpmn:textAnnotation>
     <bpmn:association id="Association_10y192l" sourceRef="TASK_WITHOUT_NAME" targetRef="TEXTANNOTATION_WITH_NAME" />
+    <bpmn:group id="GROUP" categoryValueRef="CATEGORY_VALUE" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">
@@ -63,6 +67,12 @@
         <di:waypoint xsi:type="dc:Point" x="502" y="213" />
         <di:waypoint xsi:type="dc:Point" x="571" y="139" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Group_di" bpmnElement="GROUP">
+        <dc:Bounds x="180" y="105" width="188" height="154" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="184" y="107" width="58.28571319580078" height="15" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
